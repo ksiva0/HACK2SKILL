@@ -220,7 +220,6 @@ function startRecording(inputId, btn) {
 '''
 
 
-# For navs with back button
 NAV_BACK = '''
 <div class="nav-back-wrapper">
     <a href="{{ url_for('dashboard') }}">
@@ -331,7 +330,6 @@ DASHBOARD = '''
   </div>
 </div>
 <script>
-// Simple one-at-a-time carousel
 const images = document.querySelectorAll('.carousel-img');
 let idx = 0;
 setInterval(()=> {
@@ -593,3 +591,4 @@ def my_products():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
