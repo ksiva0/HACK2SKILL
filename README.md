@@ -14,7 +14,7 @@ pip install -r requirements.txt
 * Flask
 * gunicorn
 
-3. Run the Application
+### 3. Run the Application
 * using command: python app.py
 * The app will be available at https://hack2skill-mx8i.onrender.com/
 
