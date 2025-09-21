@@ -8,14 +8,11 @@ Getting Started
 bash
 git clone https://github.com/yourusername/ai-handmade-marketplace.git
 cd ai-handmade-marketplace
-2. Install Dependencies
-bash
+### 2. Install Dependencies
 pip install -r requirements.txt
-(If you do not have a requirements.txt, at minimum:)
 
-text
-Flask
-gunicorn
+* Flask
+* gunicorn
 
 3. Run the Application
 bash
