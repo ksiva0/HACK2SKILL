@@ -220,6 +220,7 @@ function startRecording(inputId, btn) {
 '''
 
 
+# For navs with back button
 NAV_BACK = '''
 <div class="nav-back-wrapper">
     <a href="{{ url_for('dashboard') }}">
@@ -330,6 +331,7 @@ DASHBOARD = '''
   </div>
 </div>
 <script>
+// Simple one-at-a-time carousel
 const images = document.querySelectorAll('.carousel-img');
 let idx = 0;
 setInterval(()=> {
@@ -426,7 +428,10 @@ SELL = '''
 <form method="post" enctype="multipart/form-data">
     <input type="text" name="pname" placeholder="Product Name" required>
     <input type="text" name="pcat" placeholder="Category" required>
-    <textarea name="pdesc" placeholder="Description" required></textarea>
+    <div class="input-group">
+        <textarea id="pdesc" name="pdesc" placeholder="Description" required></textarea>
+        <button type="button" class="mic-btn" aria-label="Speak description" onclick="startRecording('pdesc', this)" tabindex="-1" title="Record Description">🎤</button>
+    </div>
     <input type="file" name="pfile" accept="image/*" required>
     <button type="submit">Add Product</button>
 </form>
@@ -479,11 +484,45 @@ LOGIN = '''
 <div class="container">
 <h2>Login</h2>
 <form method="post">
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
+    <div class="input-group">
+        <input type="email" id="login_email" name="email" placeholder="Email" required>
+        <button type="button" class="mic-btn" aria-label="Speak email" onclick="startRecording('login_email', this)" tabindex="-1" title="Record Email">🎤</button>
+    </div>
+    <div class="input-group">
+        <input type="password" id="login_password" name="password" placeholder="Password" required>
+        <button type="button" class="mic-btn" aria-label="Speak password" onclick="startRecording('login_password', this)" tabindex="-1" title="Record Password">🎤</button>
+    </div>
     <button type="submit">Login</button>
 </form>
 <p style="color:red;">{{ message }}</p>
+<script>
+function startRecording(inputId, btn) {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        alert("Sorry, your browser doesn't support Speech Recognition.");
+        return;
+    }
+    if(window._recognition && window._recognition.active) {
+        window._recognition.stop();
+        return;
+    }
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var recognition = new SpeechRecognition();
+    window._recognition = recognition;
+    recognition.lang = 'en-US';
+    recognition.onstart = function() { btn.classList.add('active'); };
+    recognition.onspeechend = function() { recognition.stop(); btn.classList.remove('active'); };
+    recognition.onerror = function(event) { btn.classList.remove('active'); };
+    recognition.onresult = function(event) {
+        let transcript = event.results[0][0].transcript;
+        let input = document.getElementById(inputId);
+        if (input.tagName.toLowerCase() === 'textarea' || input.tagName.toLowerCase() === 'input') {
+            input.value = transcript;
+        }
+        btn.classList.remove('active');
+    };
+    recognition.start();
+}
+</script>
 </div>
 </body>
 </html>
@@ -591,4 +630,3 @@ def my_products():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
